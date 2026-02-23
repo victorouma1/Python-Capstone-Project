@@ -1,10 +1,22 @@
-# Python-Capstone-Project
+# Global Job Market Mapper
 2.	Global Job Market Skill-Mapper<br>
+### Description
 A career-planning tool that identifies which technical skills are currently in demand and what they pay.<br>
-•	Web Scraping: Scrape job boards  to get raw job descriptions.<br>
-•	APIs: Use the Adzuna or Indeed to get structured job data and salary estimates.<br>
-•	Regex: This is key here—use Regex to extract specific technical keywords e.g., Python, AWS, Tableau from the raw text descriptions.<br>
-•	OOP: Implement Encapsulation by creating a JobEntry class where the salary data is protected and can only be accessed/modified through specific methods.<br>
-•	Databases: Store the raw scraped job postings in MongoDB and the Skills vs. Salary relationship table in SQL.<br>
-•	Best Practices: Write a suite of Unit Tests to ensure your Regex doesn't miss variations of keywords .
+### Features
+Scrape job boards to get raw job descriptions<br>
+Obatin structured job data and salary estimates<br>
+Allow user to input skill(s) and get a rough salary estimate<br>
+Allow user to see what skill(s) are most valuable per sector<br>
+Allow user to see what skill(s) are most valuable in general<br>
+Store the raw scraped data in MongoDB and cleaned data in SQL<br>
+Link Jobs, Skills, and Companies tables<br>
+### Concepts
+Loops<br>
+Dictionaries and lists<br>
+Web Scraping:<br>
+APIs:<br>
+Regex:<br>
+OOP<br>
+Databases: MongoDB and SQL<br>
+Unit Testing <br>
 
