@@ -1,4 +1,5 @@
 # Python-Capstone-Project
+<br>
 1.	Multi-Source Financial Sentiment & Price Oracle<br>
 A dashboard that correlates "Hype" (social media) with "Reality" (market prices).<br>
 The Workflow:<br>
@@ -8,7 +9,7 @@ The Workflow:<br>
 •	Databases: Use SQL for the time-series price data. Use NoSQL,MongoDB for the high-volume, varying schemas of social media posts/comments.<br>
 •	Best Practices: Modularize your code into data_ingestion, processing, and storage modules. Use pytest to verify your API connection logic.<br>
 <br>
-3.	Global Job Market "Skill-Mapper"<br>
+2.	Global Job Market "Skill-Mapper"<br>
 A career-planning tool that identifies which technical skills are currently in demand and what they pay.<br>
 •	Web Scraping: Scrape job boards  to get raw job descriptions.<br>
 •	APIs: Use the Adzuna or Indeed to get structured job data and salary estimates.<br>
