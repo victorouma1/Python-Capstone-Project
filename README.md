@@ -8,7 +8,7 @@ The Workflow:
 •	Databases: Use SQL for the time-series price data. Use NoSQL,MongoDB for the high-volume, varying schemas of social media posts/comments.
 •	Best Practices: Modularize your code into data_ingestion, processing, and storage modules. Use pytest to verify your API connection logic.
 
-2.	Global Job Market "Skill-Mapper"
+3.	Global Job Market "Skill-Mapper"
 A career-planning tool that identifies which technical skills are currently in demand and what they pay.
 •	Web Scraping: Scrape job boards  to get raw job descriptions.
 •	APIs: Use the Adzuna or Indeed to get structured job data and salary estimates.
