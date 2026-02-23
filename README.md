@@ -1,5 +1,4 @@
 # Global Job Market Mapper
-2.	Global Job Market Skill-Mapper<br>
 ### Description
 A career-planning tool that identifies which technical skills are currently in demand and what they pay.<br>
 ### Features
@@ -14,8 +13,8 @@ Link Jobs, Skills, and Companies tables<br>
 Loops<br>
 Dictionaries and lists<br>
 Web Scraping:<br>
-APIs:<br>
-Regex:<br>
+APIs<br>
+Regex<br>
 OOP<br>
 Databases: MongoDB and SQL<br>
 Unit Testing <br>
