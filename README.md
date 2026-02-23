@@ -19,11 +19,11 @@ OOP<br>
 Databases: MongoDB and SQL<br>
 Unit Testing <br>
 ### Tools and Libraries
-*Libraries:*
-BeautifulSoup and requests
-pandas
-csv
-sqlite3
-MongoClient
-unittest
-Counter
+*Libraries:*<br>
+BeautifulSoup and requests<br>
+pandas<br>
+csv<br>
+sqlite3<br>
+MongoClient<br>
+unittest<br>
+Counter<br>
