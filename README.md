@@ -4,7 +4,7 @@ For recent university graduates and career changers in the UK the transition int
 ### Description
 A career-planning tool that identifies which technical skills are currently in demand and what they pay for people who have finished university with a Data Science or tech related degree; or people looking for a career change to tech in the UK 
 ### Features
-The raw job data shall be obtained from the Adzuna API and the Indeed API<br>
+The raw job data shall be obtained from the Adzuna API and the SimplifyJobs Repo<br>
 Scrape job boards to get raw job descriptions<br>
 Obatin structured job data and salary estimates<br>
 Allow user to input skill(s) and get a rough salary estimate<br>
