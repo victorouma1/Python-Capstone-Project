@@ -76,7 +76,7 @@ if st.session_state.country == "UK":
 
     if st.button('2. What skills are in demand'):
         st.session_state.show_skills_form = True
-        skills = ["Python", "SQL", "Machine Learning", "AWS", "Java","JavaScript","C++","CSS","HTML","MATLAB","AI"]
+        skills = ["Python", "SQL", "Machine Learning", "AWS", "Java","JavaScript","C++","CSS","HTML","MATLAB","AI","Power BI"]
         search_terms = "data, software, web development, engineer, tech"
         for i in range(1,6):
             url = f"http://api.adzuna.com/v1/api/jobs/gb/search/{i}?app_id=bbb231a1&app_key=ead6a75aff389175119f5fc5fd7d97cc&content-type=application/json"
@@ -117,6 +117,21 @@ if st.session_state.country == "Kenya":
     
     min_salary1 = data2[0]['data'][0]['min_base_salary'] # in KES
     max_salary1 = data2[0]['data'][0]['max_base_salary'] 
+    job_title1 = data2[0]['parameters']['job_title'] 
+    publisher_link = data2[0]['data'][0]['publisher_link']
+
+    pattern1 = r"\d{4}-\d{2}-\d{2}"
+    date_text1 = data2[0]['data'][0]['salaries_updated_at']
+    date_find = re.findall(pattern1, date_text1)
+    date1 = date_find[0]
+
+    processing = {
+        "Job Title": job_title1,
+        "Minimum Salary (KSH)": min_salary1,
+        "Maximum Salary (KSH)": max_salary1,
+        "Date Posted": date1,
+        "Publisher Link": publisher_link
+    }
 
     average_obj = AverageSalary(min_salary1, max_salary1)
 
@@ -126,9 +141,12 @@ if st.session_state.country == "Kenya":
     st.write(f"Average salary: Ksh {average_salary}")
     st.write(f"Amount of opportunities: {amount}")
 
+    dataframe_1 = pd.DataFrame(processing, index=[0])
+    st.dataframe(dataframe_1)
+
 try:
     data_frame = pd.DataFrame(total_skill_counts.items(), columns=['Skill', 'Count'])
-    st.dataframe(data_frame.style.highlight_max(axis=0))
+    st.dataframe(data_frame)
 except NameError:
     print("Data Loaded Successfully")
 
@@ -140,6 +158,7 @@ try:
     date_list = []
     company_list = []
     description_list = []
+    url_list = []
     pattern = r"\d{4}-\d{2}-\d{2}"
     for a in range(5):
         sorted_jobs = sorted(
@@ -148,9 +167,13 @@ try:
         reverse=True
         )  
         for i in range(len(data[a]['results'])):
-        
+
+            redirect_url = sorted_jobs[i]['redirect_url']
+            url_list.append(redirect_url)
+
             salary_min = sorted_jobs[i]['salary_min']
             salary_max = sorted_jobs[i]['salary_max']
+            
             max_list.append(salary_max)
             min_list.append(salary_min)
 
@@ -174,8 +197,8 @@ try:
     st.write(f"Amount of Job opprtunities requiring skill(s): {count}")
 
     database_data = []
-    for job,salary,dates,company in zip(jobs_list,salary_list,date_list,company_list):
-        job_data = (job,salary, dates,company)
+    for job,salary,dates,company,redirect in zip(jobs_list,salary_list,date_list,company_list,url_list):
+        job_data = (job,salary, dates,company, redirect)
         database_data.append(job_data)
 except IndexError:
     print("Halfway")
@@ -195,14 +218,15 @@ try:
                 Job_Title TEXT NOT NULL, 
                 Salary_GBP TEXT NOT NULL,
                 Date_Posted DATE NOT NULL,
-                Company TEXT NOT NULL
+                Company TEXT NOT NULL,
+                URL TEXT NOT NULL
                 )
                 """)
     conn.commit()
 
     cursor.executemany("""
-                    INSERT INTO Jobs (Job_Title, Salary_GBP, Date_Posted, Company)
-                    VALUES (?, ?, ?, ?)
+                    INSERT INTO Jobs (Job_Title, Salary_GBP, Date_Posted, Company, URL)
+                    VALUES (?, ?, ?, ?, ?)
                     """, database_data)
     conn.commit()
 except NameError:
