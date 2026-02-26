@@ -4,7 +4,7 @@ For recent university graduates and career changers in the kenya the transition 
 ### Description
 A career-planning tool that identifies which technical skills are currently in demand and what they pay for people who have finished university with a Data Science or tech related degree; or people looking for a career change to tech in Kenya or abroad. 
 ### Features
-The raw job data shall be obtained from the Adzuna API and the SimplifyJobs Repo<br>
+The raw job data shall be obtained from the Adzuna API and the J Search API<br>
 Scrape job boards to get raw job descriptions<br>
 Obatin structured job data and salary estimates<br>
 Allow user to input skill(s) and get a rough salary estimate<br>
@@ -13,11 +13,10 @@ Allow user to see what skill(s) are most valuable in general<br>
 Return Number of job postings requiring specific skill(s)<br>
 Return Average or median salary (if available)<br>
 Return Top 10 most in-demand skills<br>
-Realtionships between Jobs, Skills and Companies shown in tables
+Realtionships between Jobs, Skills and Companies shown in table
 ### Concepts
 Loops<br>
 Dictionaries and lists<br>
-Web Scraping:<br>
 APIs<br>
 Regex<br>
 OOP<br>
@@ -27,9 +26,10 @@ Unit Testing
 *Tools:*<br>
 Streamlit
 *Libraries:*<br>
-BeautifulSoup and requests<br>
+requests<br>
 pandas<br>
-csv<br>
 sqlite3<br>
-unittest<br>
 Counter
+time 
+datetime
+re
