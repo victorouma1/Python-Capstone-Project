@@ -21,7 +21,6 @@ APIs<br>
 Regex<br>
 OOP<br>
 Databases:SQLite<br>
-Unit Testing
 ### Tools and Libraries
 *Tools:*<br>
 Streamlit
