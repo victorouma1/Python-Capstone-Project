@@ -28,7 +28,7 @@ Streamlit
 requests<br>
 pandas<br>
 sqlite3<br>
-Counter
-time 
-datetime
-re
+Counter<br>
+time<br>
+datetime<br>
+re<br>
