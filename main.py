@@ -114,35 +114,39 @@ if st.session_state.country == "Kenya":
     response = requests.get(url1, headers=headers, params=query_string)
 
     data2.append(response.json())
+
+    try:
+        min_salary1 = data2[0]['data'][0]['min_base_salary'] # in KES
+        max_salary1 = data2[0]['data'][0]['max_base_salary'] 
+        job_title1 = data2[0]['parameters']['job_title'] 
+        publisher_link = data2[0]['data'][0]['publisher_link']
+
+        pattern1 = r"\d{4}-\d{2}-\d{2}"
+        date_text1 = data2[0]['data'][0]['salaries_updated_at']
+        date_find = re.findall(pattern1, date_text1)
+        date1 = date_find[0]
+
+        processing = {
+            "Job Title": job_title1,
+            "Minimum Salary (KSH)": min_salary1,
+            "Maximum Salary (KSH)": max_salary1,
+            "Date Posted": date1,
+            "Publisher Link": publisher_link
+        }
+
+        average_obj = AverageSalary(min_salary1, max_salary1)
+
+        average_salary = average_obj.ke_average()
+        amount = len(data2)
+
+        st.write(f"Average salary: Ksh {average_salary}")
+        st.write(f"Amount of opportunities: {amount}")
+
+        dataframe_1 = pd.DataFrame(processing, index=[0])
+        st.dataframe(dataframe_1)
     
-    min_salary1 = data2[0]['data'][0]['min_base_salary'] # in KES
-    max_salary1 = data2[0]['data'][0]['max_base_salary'] 
-    job_title1 = data2[0]['parameters']['job_title'] 
-    publisher_link = data2[0]['data'][0]['publisher_link']
-
-    pattern1 = r"\d{4}-\d{2}-\d{2}"
-    date_text1 = data2[0]['data'][0]['salaries_updated_at']
-    date_find = re.findall(pattern1, date_text1)
-    date1 = date_find[0]
-
-    processing = {
-        "Job Title": job_title1,
-        "Minimum Salary (KSH)": min_salary1,
-        "Maximum Salary (KSH)": max_salary1,
-        "Date Posted": date1,
-        "Publisher Link": publisher_link
-    }
-
-    average_obj = AverageSalary(min_salary1, max_salary1)
-
-    average_salary = average_obj.ke_average()
-    amount = len(data2)
-
-    st.write(f"Average salary: Ksh {average_salary}")
-    st.write(f"Amount of opportunities: {amount}")
-
-    dataframe_1 = pd.DataFrame(processing, index=[0])
-    st.dataframe(dataframe_1)
+    except IndexError:
+        st.write(f"{role} is not available in database ")
 
 try:
     data_frame = pd.DataFrame(total_skill_counts.items(), columns=['Skill', 'Count'])
