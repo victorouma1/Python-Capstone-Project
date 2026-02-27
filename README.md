@@ -18,6 +18,7 @@ Realtionships between Jobs, Skills and Companies shown in table
 Loops<br>
 Dictionaries and lists<br>
 APIs<br>
+Web Scraping<br>
 Regex<br>
 OOP<br>
 Databases:SQLite<br>
@@ -32,3 +33,4 @@ Counter<br>
 time<br>
 datetime<br>
 re<br>
+BeautifulSoup<br>
