@@ -99,54 +99,84 @@ if st.session_state.country == "UK":
                 normalized_matches = [m for m in matches]
                 total_skill_counts.update(normalized_matches)
 if st.session_state.country == "Kenya":
-    with st.form("my_form3"):
-        role = st.text_input("Input your desired role: ")
-        submission = st.form_submit_button("Submit")
+    if "show_form3" not in st.session_state:
+        st.session_state.show_form3 = False
+    if st.button("Specific Role you want"):
+        st.session_state.show_form3 = True
+    if st.session_state.show_form3:
+        with st.form("my_form3"):
+            role = st.text_input("Input your desired role: ")
+            submission = st.form_submit_button("Submit")
 
-    url1 = "https://jsearch.p.rapidapi.com/estimated-salary"
+        url1 = "https://jsearch.p.rapidapi.com/estimated-salary"
 
-    query_string = {"job_title":f"{role}","location":f"{city}","location_type":"ANY","years_of_experience":"ALL"}
+        query_string = {"job_title":f"{role}","location":f"{city}","location_type":"ANY","years_of_experience":"ALL"}
 
-    headers = {
-	    "x-rapidapi-key": "afe3bf38femsh5c889fa2fbf37d7p1f69dbjsn23f92942daf6",
-	    "x-rapidapi-host": "jsearch.p.rapidapi.com"
-    }
-    response = requests.get(url1, headers=headers, params=query_string)
-
-    data2.append(response.json())
-
-    try:
-        min_salary1 = data2[0]['data'][0]['min_base_salary'] # in KES
-        max_salary1 = data2[0]['data'][0]['max_base_salary'] 
-        job_title1 = data2[0]['parameters']['job_title'] 
-        publisher_link = data2[0]['data'][0]['publisher_link']
-
-        pattern1 = r"\d{4}-\d{2}-\d{2}"
-        date_text1 = data2[0]['data'][0]['salaries_updated_at']
-        date_find = re.findall(pattern1, date_text1)
-        date1 = date_find[0]
-
-        processing = {
-            "Job Title": job_title1,
-            "Minimum Salary (KSH)": min_salary1,
-            "Maximum Salary (KSH)": max_salary1,
-            "Date Posted": date1,
-            "Publisher Link": publisher_link
+        headers = {
+            "x-rapidapi-key": "afe3bf38femsh5c889fa2fbf37d7p1f69dbjsn23f92942daf6",
+            "x-rapidapi-host": "jsearch.p.rapidapi.com"
         }
+        response = requests.get(url1, headers=headers, params=query_string)
 
-        average_obj = AverageSalary(min_salary1, max_salary1)
+        data2.append(response.json())
 
-        average_salary = average_obj.ke_average()
-        amount = len(data2)
+        try:
+            min_salary1 = data2[0]['data'][0]['min_base_salary'] # in KES
+            max_salary1 = data2[0]['data'][0]['max_base_salary'] 
+            job_title1 = data2[0]['parameters']['job_title'] 
+            publisher_link = data2[0]['data'][0]['publisher_link']
 
-        st.write(f"Average salary: Ksh {average_salary}")
-        st.write(f"Amount of opportunities: {amount}")
+            pattern1 = r"\d{4}-\d{2}-\d{2}"
+            date_text1 = data2[0]['data'][0]['salaries_updated_at']
+            date_find = re.findall(pattern1, date_text1)
+            date1 = date_find[0]
 
-        dataframe_1 = pd.DataFrame(processing, index=[0])
-        st.dataframe(dataframe_1)
+            processing = {
+                "Job Title": job_title1,
+                "Minimum Salary (KSH)": min_salary1,
+                "Maximum Salary (KSH)": max_salary1,
+                "Date Posted": date1,
+                "Publisher Link": publisher_link
+            }
+
+            average_obj = AverageSalary(min_salary1, max_salary1)
+
+            average_salary = average_obj.ke_average()
+            amount = len(data2)
+
+            st.write(f"Average salary: Ksh {average_salary}")
+            st.write(f"Amount of opportunities: {amount}")
+
+            dataframe_1 = pd.DataFrame(processing, index=[0])
+            st.dataframe(dataframe_1)
+        
+        except IndexError:
+            st.write(f"{role} is not available in database ")
     
-    except IndexError:
-        st.write(f"{role} is not available in database ")
+    if st.button("What roles are currently available: "):
+        url1 = "https://www.brightermonday.co.ke/jobs/software-data?industry=it-telecoms"
+        response1 = requests.get(url1)
+        soup1 = BeautifulSoup(response1.content, 'html.parser')
+        title_html = soup1.find_all('div', class_='flex flex-wrap col-span-1 mb-5 bg-white rounded-lg border border-gray-300 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-500')
+
+        ke_list = []
+        for title in title_html:
+            ke_title = title.find('p', class_='text-lg font-medium break-words text-link-500')
+            if ke_title:
+                ke_summary = title.find('p', class_ = 'text-sm font-normal text-gray-700 md:text-gray-500 md:pl-5').text
+                ke_salary = title.find('span', class_ = 'mr-1')
+                ke_company_raw = title.find('p', class_ = 'text-sm text-blue-700 text-loading-animate inline-block mt-3').text
+                ke_date_posted = title.find('p', class_ = 'text-sm font-normal text-gray-700 text-loading-animate').text
+            if ke_salary:
+                ke_salary = ke_salary.text
+            if not ke_salary:
+                ke_salary = 'Confidential'
+                whitespace = r'\s+'
+                ke_company = re.sub(whitespace, '', ke_company_raw)
+            ke_list.append([ke_title.text, ke_salary, ke_company, ke_date_posted])
+        
+        df = pd.DataFrame(ke_list, columns=['Job Title', 'Salary', 'Company', 'Date Posted'])
+        st.dataframe(df)
 
 try:
     data_frame = pd.DataFrame(total_skill_counts.items(), columns=['Skill', 'Count'])
