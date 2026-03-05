@@ -107,51 +107,45 @@ if st.session_state.country == "Kenya":
         with st.form("my_form3"):
             role = st.text_input("Input your desired role: ")
             submission = st.form_submit_button("Submit")
-
-        url1 = "https://jsearch.p.rapidapi.com/estimated-salary"
-
-        query_string = {"job_title":f"{role}","location":f"{city}","location_type":"ANY","years_of_experience":"ALL"}
-
-        headers = {
-            "x-rapidapi-key": "afe3bf38femsh5c889fa2fbf37d7p1f69dbjsn23f92942daf6",
-            "x-rapidapi-host": "jsearch.p.rapidapi.com"
-        }
-        response = requests.get(url1, headers=headers, params=query_string)
-
-        data2.append(response.json())
-
-        try:
-            min_salary1 = data2[0]['data'][0]['min_base_salary'] # in KES
-            max_salary1 = data2[0]['data'][0]['max_base_salary'] 
-            job_title1 = data2[0]['parameters']['job_title'] 
-            publisher_link = data2[0]['data'][0]['publisher_link']
-
-            pattern1 = r"\d{4}-\d{2}-\d{2}"
-            date_text1 = data2[0]['data'][0]['salaries_updated_at']
-            date_find = re.findall(pattern1, date_text1)
-            date1 = date_find[0]
-
-            processing = {
-                "Job Title": job_title1,
-                "Minimum Salary (KSH)": min_salary1,
-                "Maximum Salary (KSH)": max_salary1,
-                "Date Posted": date1,
-                "Publisher Link": publisher_link
-            }
-
-            average_obj = AverageSalary(min_salary1, max_salary1)
-
-            average_salary = average_obj.ke_average()
-            amount = len(data2)
-
-            st.write(f"Average salary: Ksh {average_salary}")
-            st.write(f"Amount of opportunities: {amount}")
-
-            dataframe_1 = pd.DataFrame(processing, index=[0])
-            st.dataframe(dataframe_1)
         
-        except IndexError:
-            st.write(f"{role} is not available in database ")
+        url2 = f"https://www.myjobmag.co.ke/search/jobs?q={role}"
+        response_1_ke = requests.get(url2)
+        soup2 = BeautifulSoup(response_1_ke.content, 'html.parser')
+
+        base_url = "https://www.myjobmag.co.ke/"
+        all_jobs = []
+
+        job_listings = soup2.find_all('li', class_='job-list-li')
+
+        for job in job_listings:
+            try:
+                title_tag = job.find('h2').find('a')
+                title = title_tag.get_text(strip=True)
+                link = base_url + title_tag['href']
+
+                company = job.find('li', class_='job-logo').find('img')['alt']
+
+                desc_tag = job.find('li', class_='job-desc')
+                description_sub = desc_tag.get_text(strip=True).replace('Job Summary:', '')
+                description = description_sub.replace("\r\n\r\n","")
+
+                date = job.find('li', id = 'job-date').get_text(strip=True)
+
+                job_data = {
+                    "title": title,
+                    "company": company,
+                    "link": link,
+                    "description": description,
+                    "job date": date
+                }
+                
+                all_jobs.append(job_data)
+            except AttributeError:
+                continue
+
+        df = pd.DataFrame(all_jobs)
+        st.dataframe(df)
+
     
     if st.button("What roles are currently available: "):
         url1 = "https://www.brightermonday.co.ke/jobs/software-data?industry=it-telecoms"
