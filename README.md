@@ -24,7 +24,7 @@ OOP<br>
 Databases:SQLite<br>
 ### Tools and Libraries
 *Tools:*<br>
-Streamlit
+Streamlit<br>
 *Libraries:*<br>
 requests<br>
 pandas<br>
